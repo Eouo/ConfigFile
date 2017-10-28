@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qi.mapper.ArticleMapper">
+    <!--开启二级缓存-->
+    <!--pojo 持久化类必须是可序列化的类类-->
+    <!--size 存储4096个对象  eviction 缓存策略 LRU  flushInterval  缓存过期时间 readOnly 只读-->
+    <cache size="4096" eviction="LRU" readOnly="true" flushInterval="30000"/>
+    <!--解决代码重复-->
+    <resultMap id="baseMap" type="article">
+
+        <id column="id" property="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="createtime"/>
+        <result property="scanNum" column="scannum"/>
+        <result property="replyNum" column="replynum"/>
+        <result property="nodeId" column="nodeid"/>
+        <result property="lastReplyTime" column="lastreplytime"/>
+
+    </resultMap>
+
+    <!--一对多-->
+    <resultMap id="articleMap" type="article" extends="baseMap">
+        <!--一对多-->
+        <!--嵌套查询-->
+        <!--认为与缓存配合最好-->
+        <association property="node" javaType="node" column="nodeid" select="com.qi.mapper.nodeMapper.findById">
+        </association>
+        <collection property="labelList" ofType="label" column="id" select="com.qi.mapper.labelMapper.findByArticleId">
+        </collection>
+    </resultMap>
+
+    <!--一对多的实现-->
+    <select id="findByIdWithLabel" resultMap="articleMap">
+        SELECT
+            t_article.id,
+            t_article.title,
+            t_article.content,
+            t_article.createtime,
+            t_article.scannum,
+            t_article.replynum,
+            t_article.lastreplytime,
+            t_article.nodeid
+        FROM
+            t_article
+        WHERE
+            t_article.id = #{id}
+    </select>
+</mapper>
