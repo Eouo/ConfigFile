@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!--将类或者对象放入bean容器    lazy-init 为true时,什么时候调用,什么时候加载-->
+    <bean class="com.qi.dao.UserDao" id="userDao" lazy-init="true"/>
+    <!--给放入的类起别名-->
+    <alias name="userDao" alias="userDao2"/>
+    <!--  如果不是单例类  scope 设置为prototype    默认值为singleton-->
+    <bean class="com.qi.service.impl.UserServiceImpl" scope="prototype">
+        <!--name 为set方法后名字首字母小写    ref 为注入的类的id-->
+        <property name="userDao" ref="userDao"/>
+
+        <!--该参数是直接给列表中的添加值-->
+        <property name="a" value="100"/>
+        <property name="str" value="string发"/>
+        <property name="userDaoSet">
+            <!--Set 根据hashCode值来存储,同一个对象的hashcode值相等-->
+            <set>
+                <ref bean="userDao"/>
+                <ref bean="userDao"/>
+            </set>
+        </property>
+
+        <property name="userDaoList">
+            <!--list的类型(ArrayList,linkedList)由接受时,的接受对象决定-->
+            <list>
+                <ref bean="userDao"/>
+                <ref bean="userDao"/>
+            </list>
+        </property>
+        <property name="stringUserDaoMap">
+            <map>
+                <entry key="a" value-ref="userDao"/>
+                <entry key="b" value-ref="userDao"/>
+            </map>
+        </property>
+        <property name="properties">
+            <props>
+                <prop key="a">1</prop>
+                <prop key="b">2</prop>
+                <prop key="c">3</prop>
+            </props>
+        </property>
+
+    </bean>
+
+</beans>
