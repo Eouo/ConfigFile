@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <!--指定数据库驱动jar的位置-->
+    <classPathEntry
+            location="D:\Learn\jars\DB\mysql-connector-java-5.1.36.jar"/>
+
+    <!--id 自定义
+    targetRuntime: -MyBatis3Simple  生成简单的CRUD
+                   -MyBatis3  生成带有Exception类的CRUD
+    -->
+    <context id="mybatisConfig" targetRuntime="MyBatis3">
+        <!--禁用注释-->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+            <!--类的创建时间-->
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+        <!--连接数据库得的信息-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql:///test" userId="root"
+                        password="123456"/>
+
+        <!--生成Entity-->
+        <javaModelGenerator targetPackage="com.qi.entity" targetProject="src/main/java"/>
+
+        <!--XML 映射文件-->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
+
+        <!--Mapper 接口-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.qi.mapper" targetProject="src/main/java"/>
+
+        <!-- table 配置-->
+        <table tableName="kaola" domainObjectName="Kaola"/>
+        <table tableName="kaola_type" domainObjectName="KaolaType"/>
+
+    </context>
+</generatorConfiguration>
